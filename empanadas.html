@@ -1,75 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<title>Pedido de Empanadas</title>
-<style>
-  body { font-family: Arial, sans-serif; max-width: 400px; margin: 2rem auto; }
-  label { display: block; margin-bottom: 0.5rem; }
-  input[type=number] { width: 50px; }
-  .total { margin-top: 1rem; font-weight: bold; }
-</style>
+  <meta charset="UTF-8" />
+  <title>Pedido de Empanadas</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      /* Fondo con imagen subida */
+      background: url('bebcf9dd-8dbc-4db4-ad43-4745b1bcccdb.png') no-repeat center center fixed;
+      background-size: contain;
+      background-color: #003048; /* Fondo base similar al color de la imagen */
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      padding: 20px;
+    }
+    h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    form {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+      min-width: 280px;
+    }
+    label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      font-size: 1.3rem;
+    }
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+    }
+    .total {
+      margin-top: 20px;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+    }
+  </style>
 </head>
 <body>
 
-<h2>Pedido de Empanadas</h2>
+  <h2>Pedido de Empanadas</h2>
 
-<form id="pedidoForm">
-  <label>Franco: <input type="number" min="0" value="0" id="Franco" /></label>
-  <label>Ariana: <input type="number" min="0" value="0" id="Ariana" /></label>
-  <label>Laureano: <input type="number" min="0" value="0" id="Laureano" /></label>
-  <label>Maite: <input type="number" min="0" value="0" id="Maite" /></label>
-  <label>Damián: <input type="number" min="0" value="0" id="Damián" /></label>
-  <label>Asdrúbal: <input type="number" min="0" value="0" id="Asdrúbal" /></label>
-  <label>Francisco: <input type="number" min="0" value="0" id="Francisco" /></label>
-  <label>Agustín: <input type="number" min="0" value="0" id="Agustín" /></label>
-</form>
+  <form id="pedidoForm">
+    <label>Franco: <input type="number" min="0" value="0" id="Franco" /></label>
+    <label>Ariana: <input type="number" min="0" value="0" id="Ariana" /></label>
+    <label>Laureano: <input type="number" min="0" value="0" id="Laureano" /></label>
+    <label>Maite: <input type="number" min="0" value="0" id="Maite" /></label>
+    <label>Damián: <input type="number" min="0" value="0" id="Damián" /></label>
+    <label>Asdrúbal: <input type="number" min="0" value="0" id="Asdrúbal" /></label>
+    <label>Francisco: <input type="number" min="0" value="0" id="Francisco" /></label>
+    <label>Agustín: <input type="number" min="0" value="0" id="Agustín" /></label>
+  </form>
 
-<div class="total">Total: <span id="totalEmpanadas">0</span></div>
+  <div class="total">Total: <span id="totalEmpanadas">0</span></div>
 
-<script>
-  const nombres = ['Franco', 'Ariana', 'Laureano', 'Maite', 'Damián', 'Asdrúbal', 'Francisco', 'Agustín'];
-  const totalElem = document.getElementById('totalEmpanadas');
+  <script>
+    const nombres = ['Franco', 'Ariana', 'Laureano', 'Maite', 'Damián', 'Asdrúbal', 'Francisco', 'Agustín'];
+    const totalElem = document.getElementById('totalEmpanadas');
 
-  // Carga valores guardados en localStorage
-  function cargarValores() {
+    function cargarValores() {
+      nombres.forEach(nombre => {
+        const valorGuardado = localStorage.getItem(nombre);
+        if (valorGuardado !== null) {
+          document.getElementById(nombre).value = valorGuardado;
+        }
+      });
+      actualizarTotal();
+    }
+
+    function guardarYActualizar(e) {
+      const input = e.target;
+      const valor = input.value < 0 ? 0 : input.value;
+      input.value = valor;
+      localStorage.setItem(input.id, valor);
+      actualizarTotal();
+    }
+
+    function actualizarTotal() {
+      let suma = 0;
+      nombres.forEach(nombre => {
+        const val = parseInt(document.getElementById(nombre).value) || 0;
+        suma += val;
+      });
+      totalElem.textContent = suma;
+    }
+
     nombres.forEach(nombre => {
-      const valorGuardado = localStorage.getItem(nombre);
-      if (valorGuardado !== null) {
-        document.getElementById(nombre).value = valorGuardado;
-      }
+      const input = document.getElementById(nombre);
+      input.addEventListener('input', guardarYActualizar);
     });
-    actualizarTotal();
-  }
 
-  // Guarda valores al cambiar y actualiza total
-  function guardarYActualizar(e) {
-    const input = e.target;
-    const valor = input.value < 0 ? 0 : input.value; // evitar negativos
-    input.value = valor;
-    localStorage.setItem(input.id, valor);
-    actualizarTotal();
-  }
-
-  // Suma los valores y actualiza el total
-  function actualizarTotal() {
-    let suma = 0;
-    nombres.forEach(nombre => {
-      const val = parseInt(document.getElementById(nombre).value) || 0;
-      suma += val;
-    });
-    totalElem.textContent = suma;
-  }
-
-  // Agrega evento a inputs
-  nombres.forEach(nombre => {
-    const input = document.getElementById(nombre);
-    input.addEventListener('input', guardarYActualizar);
-  });
-
-  // Carga datos al inicio
-  cargarValores();
-</script>
+    cargarValores();
+  </script>
 
 </body>
 </html>
