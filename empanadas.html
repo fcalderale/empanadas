@@ -34,13 +34,15 @@
       color: #268bd2;
     }
     img.logo {
-      max-height: 80px;
+      max-height: 100px;
       margin-bottom: 20px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
   <img class="logo" src="https://scontent-eze1-2.xx.fbcdn.net/v/t39.30808-6/481213941_1193892476074776_7938212663628279800_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=2V6jbR2zWKMQ7kNvwFZ4pEe&_nc_oc=AdksggDyJADXY3aHrKDF-g9jTUpBA-Xsjajc5TSyl9sohjr5MskSL_Ki3EBsiYDQCeI&_nc_zt=23&_nc_ht=scontent-eze1-2.xx&_nc_gid=2KIe1XJBxUgVriezVea_wQ&oh=00_AfR0hAO7MppqYXU0LVWWqQ_AjGgyMFojMhFLs4l-1Q2J5Q&oe=68773D17" alt="Logo Cantera La Chola II SA">
+
   <h1>¿Cuántas empanadas quiere cada uno?</h1>
 
   <form id="empanadaForm">
@@ -54,20 +56,4 @@
     <label>Agustin: <input type="number" value="0" min="0" name="Agustin" /></label>
   </form>
 
-  <div class="total">Total: <span id="totalEmpanadas">4</span></div>
-
-  <script>
-    const form = document.getElementById('empanadaForm');
-    const totalDisplay = document.getElementById('totalEmpanadas');
-
-    form.addEventListener('input', () => {
-      const inputs = form.querySelectorAll('input[type="number"]');
-      let total = 0;
-      inputs.forEach(input => {
-        total += parseInt(input.value) || 0;
-      });
-      totalDisplay.textContent = total;
-    });
-  </script>
-</body>
-</html>
+  <div class="total">Total: <span id=
