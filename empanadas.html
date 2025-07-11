@@ -1,81 +1,75 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pedido de Empanadas - Cantera La Chola II SA</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #fdf6e3;
-      text-align: center;
-    }
-    h1 {
-      color: #b58900;
-      margin-top: 10px;
-    }
-    label {
-      display: block;
-      margin: 10px auto;
-      width: max-content;
-      font-size: 18px;
-    }
-    input[type="number"] {
-      width: 60px;
-      padding: 5px;
-      font-size: 16px;
-      text-align: center;
-    }
-    .total {
-      margin-top: 25px;
-      font-weight: bold;
-      font-size: 22px;
-      color: #268bd2;
-    }
-    img.logo {
-      max-height: 100px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Pedido de Empanadas</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 400px; margin: 2rem auto; }
+  label { display: block; margin-bottom: 0.5rem; }
+  input[type=number] { width: 50px; }
+  .total { margin-top: 1rem; font-weight: bold; }
+</style>
 </head>
 <body>
-  <img class="logo" src="https://scontent-eze1-2.xx.fbcdn.net/v/t39.30808-6/481213941_1193892476074776_7938212663628279800_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=2V6jbR2zWKMQ7kNvwFZ4pEe&_nc_oc=AdksggDyJADXY3aHrKDF-g9jTUpBA-Xsjajc5TSyl9sohjr5MskSL_Ki3EBsiYDQCeI&_nc_zt=23&_nc_ht=scontent-eze1-2.xx&_nc_gid=2KIe1XJBxUgVriezVea_wQ&oh=00_AfR0hAO7MppqYXU0LVWWqQ_AjGgyMFojMhFLs4l-1Q2J5Q&oe=68773D17" alt="Logo Cantera La Chola II SA">
 
-  <h1>¿Cuántas empanadas quiere cada uno?</h1>
+<h2>Pedido de Empanadas</h2>
 
-  <form id="empanadaForm">
-    <label>Franco: <input type="number" value="4" min="0" name="Franco" /></label>
-    <label>Ariana: <input type="number" value="0" min="0" name="Ariana" /></label>
-    <label>Laureano: <input type="number" value="0" min="0" name="Laureano" /></label>
-    <label>Maite: <input type="number" value="0" min="0" name="Maite" /></label>
-    <label>Damian: <input type="number" value="0" min="0" name="Damian" /></label>
-    <label>Asdrúbal: <input type="number" value="0" min="0" name="Asdrúbal" /></label>
-    <label>Francisco: <input type="number" value="0" min="0" name="Francisco" /></label>
-    <label>Agustin: <input type="number" value="0" min="0" name="Agustin" /></label>
-  </form>
+<form id="pedidoForm">
+  <label>Franco: <input type="number" min="0" value="0" id="Franco" /></label>
+  <label>Ariana: <input type="number" min="0" value="0" id="Ariana" /></label>
+  <label>Laureano: <input type="number" min="0" value="0" id="Laureano" /></label>
+  <label>Maite: <input type="number" min="0" value="0" id="Maite" /></label>
+  <label>Damián: <input type="number" min="0" value="0" id="Damián" /></label>
+  <label>Asdrúbal: <input type="number" min="0" value="0" id="Asdrúbal" /></label>
+  <label>Francisco: <input type="number" min="0" value="0" id="Francisco" /></label>
+  <label>Agustín: <input type="number" min="0" value="0" id="Agustín" /></label>
+</form>
 
-  <div class="total">Total: <span id="totalEmpanadas">4</span></div>
+<div class="total">Total: <span id="totalEmpanadas">0</span></div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const form = document.getElementById('empanadaForm');
-      const totalDisplay = document.getElementById('totalEmpanadas');
+<script>
+  const nombres = ['Franco', 'Ariana', 'Laureano', 'Maite', 'Damián', 'Asdrúbal', 'Francisco', 'Agustín'];
+  const totalElem = document.getElementById('totalEmpanadas');
 
-      function updateTotal() {
-        const inputs = form.querySelectorAll('input[type="number"]');
-        let total = 0;
-        inputs.forEach(input => {
-          total += parseInt(input.value) || 0;
-        });
-        totalDisplay.textContent = total;
+  // Carga valores guardados en localStorage
+  function cargarValores() {
+    nombres.forEach(nombre => {
+      const valorGuardado = localStorage.getItem(nombre);
+      if (valorGuardado !== null) {
+        document.getElementById(nombre).value = valorGuardado;
       }
-
-      form.addEventListener('input', updateTotal);
-      updateTotal();
     });
-  </script>
+    actualizarTotal();
+  }
+
+  // Guarda valores al cambiar y actualiza total
+  function guardarYActualizar(e) {
+    const input = e.target;
+    const valor = input.value < 0 ? 0 : input.value; // evitar negativos
+    input.value = valor;
+    localStorage.setItem(input.id, valor);
+    actualizarTotal();
+  }
+
+  // Suma los valores y actualiza el total
+  function actualizarTotal() {
+    let suma = 0;
+    nombres.forEach(nombre => {
+      const val = parseInt(document.getElementById(nombre).value) || 0;
+      suma += val;
+    });
+    totalElem.textContent = suma;
+  }
+
+  // Agrega evento a inputs
+  nombres.forEach(nombre => {
+    const input = document.getElementById(nombre);
+    input.addEventListener('input', guardarYActualizar);
+  });
+
+  // Carga datos al inicio
+  cargarValores();
+</script>
+
 </body>
 </html>
